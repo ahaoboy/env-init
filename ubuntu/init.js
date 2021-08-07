@@ -49,21 +49,21 @@ const common_str = [
   "python3-pip",
 ].join(" ");
 
-await $`apt install ${common_str} -y`;
+await $`sudo apt install ${common_str} -y`;
 
 try {
   await $`code --version`;
 } catch (e) {
   await $`wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -`;
   await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"`;
-  await $`apt install code`;
+  await $`sudo apt install code`;
 }
 
 try {
   await $`google-chrome --version`;
 } catch (e) {
   await $`wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb`;
-  await $`apt install ./google-chrome-stable_current_amd64.deb`;
+  await $`sudo apt install ./google-chrome-stable_current_amd64.deb`;
 }
 
 if (!fs.existsSync(vcpkg_dir)) {
@@ -84,10 +84,9 @@ try {
   await $`zsh --version`;
 } catch (e) {
   await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
-  await $`apt install zsh -y`;
+  await $`sudo apt install zsh -y`;
   await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
 }
-
 
 if (!fs.existsSync(zsh_dir)) {
   // code ~/.oh-my-zsh/themes/avit.zsh-theme
