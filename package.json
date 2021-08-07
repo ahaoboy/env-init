@@ -1,0 +1,25 @@
+{
+  "name": "env-init",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "win": "./win/init.bat",
+    "ubuntu": "./ubuntu/init.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahaoboy/env-init.git"
+  },
+  "author": "阿豪boy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahaoboy/env-init/issues"
+  },
+  "homepage": "https://github.com/ahaoboy/env-init#readme",
+  "dependencies": {
+    "zx": "^2.0.0"
+  }
+}
