@@ -72,10 +72,6 @@ if (!fs.existsSync(vcpkg_dir)) {
   await $`./bootstrap-vcpkg.sh`;
 }
 
-await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
-await $`apt install zsh -y`;
-await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
-
 if (!fs.existsSync(emsdk_dir)) {
   await $`git clone https://github.com/juj/emsdk.git --depth=1`;
   cd(emsdk_dir);
@@ -84,6 +80,14 @@ if (!fs.existsSync(emsdk_dir)) {
   await $`./emsdk activate latest`;
   await $`source ./emsdk_env.sh`;
 }
+try {
+  await $`zsh --version`;
+} catch (e) {
+  await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
+  await $`apt install zsh -y`;
+  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
+}
+
 
 if (!fs.existsSync(zsh_dir)) {
   // code ~/.oh-my-zsh/themes/avit.zsh-theme
