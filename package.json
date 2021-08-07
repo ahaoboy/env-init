@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "win": "./win/init.bat",
-    "ubuntu": "./ubuntu/init.sh"
+    "ubuntu": ". ./ubuntu/init.sh"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,11 @@
+
+```
+git clone https://github.com/ahaoboy/env-init
+```
+
 ## ubuntu
 ```
-pnpm ubuntu
+. ./ubuntu/init.sh
 ```
 
 ## win
