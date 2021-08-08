@@ -18,8 +18,8 @@ if (!fs.existsSync(tool_dir)) {
   await $`mkdir tool`;
 }
 cd(tool_dir);
-await $`apt update -y`;
-await $`apt upgrade -y`;
+await $`sudo apt update -y`;
+await $`sudo apt upgrade -y`;
 
 const common_str = [
   "default-jre",
@@ -47,8 +47,8 @@ const common_str = [
   "apt-transport-https",
   "python3",
   "python3-pip",
+  "fonts-firacode"
 ].join(" ");
-
 await $`sudo apt install ${common_str} -y`;
 
 try {
@@ -95,8 +95,9 @@ if (!fs.existsSync(zsh_dir)) {
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
   const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
   const config_zsh__path = "~/.zshrc";
+
   await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
-  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting`;
-  await $`git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions`;
+  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
+  await $`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
   await $`chsh -s /bin/zsh`;
 }

@@ -2,8 +2,10 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/root/.oh-my-zsh"
-ZSH_DISABLE_COMPFIX="true"
+export ZSH="~/.oh-my-zsh"
+# export ZSH="~/.oh-my-zsh"
+
+# ZSH_DISABLE_COMPFIX="true"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -114,22 +116,22 @@ function emcc_setup(){
 
 alias vcpkg="~/tool/vcpkg/vcpkg"
 
-# Wasmer
-export WASMER_DIR="/root/.wasmer"
-[ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+# # Wasmer
+# export WASMER_DIR="~/.wasmer"
+# [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
 
-# Wasienv
-export WASIENV_DIR="/root/.wasienv"
-[ -s "$WASIENV_DIR/wasienv.sh" ] && source "$WASIENV_DIR/wasienv.sh"
+# # Wasienv
+# export WASIENV_DIR="~/.wasienv"
+# [ -s "$WASIENV_DIR/wasienv.sh" ] && source "$WASIENV_DIR/wasienv.sh"
 
 
-alias vcpkg_cmake="/root/vcpkg/scripts/buildsystems/vcpkg.cmake"
-alias emcc_cmake="/root/tool/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+alias vcpkg_cmake="~/tool/vcpkg/scripts/buildsystems/vcpkg.cmake"
+alias emcc_cmake="~/tool/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
 alias p="pnpm"
 alias px="pnpx"
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-export DENO_INSTALL="/root/.deno"
+export DENO_INSTALL="~/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
