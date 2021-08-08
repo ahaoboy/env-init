@@ -47,7 +47,8 @@ const common_str = [
   "apt-transport-https",
   "python3",
   "python3-pip",
-  "fonts-firacode"
+  "fonts-firacode",
+  "clang-format",
 ].join(" ");
 await $`sudo apt install ${common_str} -y`;
 
@@ -67,12 +68,14 @@ try {
 }
 
 if (!fs.existsSync(vcpkg_dir)) {
+  cd(tool_dir);
   await $`git clone https://github.com/Microsoft/vcpkg.git --depth=1`;
   cd(`${tool_dir}/vcpkg`);
   await $`./bootstrap-vcpkg.sh`;
 }
 
 if (!fs.existsSync(emsdk_dir)) {
+  cd(tool_dir);
   await $`git clone https://github.com/juj/emsdk.git --depth=1`;
   cd(emsdk_dir);
   await $`git pull`;
