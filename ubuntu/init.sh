@@ -1,3 +1,5 @@
+sudo apt install curl -y
+
 echo "=========install nodejs========="
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 source ~/.bashrc
@@ -9,5 +11,5 @@ npm i pnpm yarn -g
 pnpm i serve -g
 pnpm i zx -g
 echo "=========finish nodejs========="
-
+pnpm i
 node ubuntu/init.js
