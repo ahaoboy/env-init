@@ -12,6 +12,7 @@ cd(home);
 const tool_dir = `${home}/tool`;
 const vcpkg_dir = `${home}/tool/vcpkg`;
 const emsdk_dir = `${home}/tool/emsdk`;
+const cv_dir = `${home}/tool/opencv`;
 const zsh_dir = `${home}/.oh-my-zsh`;
 
 if (!fs.existsSync(tool_dir)) {
@@ -103,4 +104,44 @@ if (!fs.existsSync(zsh_dir)) {
   await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
   await $`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
   await $`chsh -s /bin/zsh`;
+}
+if (!fs.existsSync(cv_dir)) {
+  cd(tool_dir);
+  await $`git clone https://github.com/opencv/opencv.git --depth=1`;
+  await $`git clone https://github.com/opencv/opencv_contrib.git --depth=1`;
+  cd(cv_dir);
+  // await $`mkdir -p build && cd build`
+  await $`python3 ./platforms/js/build_js.py --emscripten_dir ~/tool/emsdk/upstream/emscripten build_wasm --build_wasm``
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y
+
+ 
+sudo apt install build-essential -y
+sudo apt install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y
+ sudo apt install libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev -y
+  # 如果需要python3支持的话，安装： sudo apt install python3-dev python3-numpy 
+  # 如果需要ffmpeg支持的话： sudo apt install ffmpeg
+
+  
+sudo apt install build-essential cmake git pkg-config libgtk-3-dev \
+    libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
+    libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev \
+    gfortran openexr libatlas-base-dev python3-dev python3-numpy \
+    libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev \
+    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev  
+    
+    mkdir -p build && cd build
+使用 CMake 命令配置 OpenCV 构建：
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_C_EXAMPLES=ON \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D OPENCV_GENERATE_PKGCONFIG=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=~/tool/opencv_contrib/modules \
+    -D BUILD_EXAMPLES=ON ..
+   
+    
+make -j4
+sudo make install
+
+`;
 }
