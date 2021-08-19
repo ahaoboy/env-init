@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/ahaoboy/env-init#readme",
   "dependencies": {
-    "zx": "^2.0.0"
+    "zx": "^3.0.0"
   }
 }

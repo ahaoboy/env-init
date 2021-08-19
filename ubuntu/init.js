@@ -24,6 +24,7 @@ await $`sudo apt upgrade -y`;
 
 const common_str = [
   "default-jre",
+  "net-tools",
   "gcc",
   "g++",
   "cmake",
@@ -33,9 +34,6 @@ const common_str = [
   "git",
   "libgtk2.0-dev",
   "pkg-config",
-  "libavcodec-dev",
-  "libavformat-dev",
-  "libswscale-dev",
   "build-essential",
   "nasm",
   "wget",
@@ -50,7 +48,7 @@ const common_str = [
   "python3-pip",
   "fonts-firacode",
   "clang-format",
-].join(" ");
+];
 await $`sudo apt install ${common_str} -y`;
 
 try {
@@ -68,12 +66,11 @@ try {
   await $`sudo apt install ./google-chrome-stable_current_amd64.deb`;
 }
 
-try{
+try {
   await $`python --version`;
-}catch (e) {
+} catch (e) {
   await $`sudo ln -s /usr/bin/python3 /usr/bin/python`;
 }
-
 
 if (!fs.existsSync(vcpkg_dir)) {
   cd(tool_dir);
@@ -96,11 +93,11 @@ try {
 } catch (e) {
   await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
   await $`sudo apt install zsh -y`;
-  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
 }
 
 if (!fs.existsSync(zsh_dir)) {
   // code ~/.oh-my-zsh/themes/avit.zsh-theme
+  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
   const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
   const ace_zsh_path = "~/.oh-my-zsh/themes/ace.zsh-theme";
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
@@ -113,6 +110,8 @@ if (!fs.existsSync(zsh_dir)) {
   await $`chsh -s /bin/zsh`;
 }
 if (!fs.existsSync(cv_dir)) {
+  // await $`sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y`;
+  // await $`apt install libavcodec-dev libavformat-dev libswscale-dev -y`;
   cd(tool_dir);
   await $`git clone https://github.com/opencv/opencv.git --depth=1`;
   await $`git clone https://github.com/opencv/opencv_contrib.git --depth=1`;
@@ -120,7 +119,7 @@ if (!fs.existsSync(cv_dir)) {
   // await $`mkdir -p build && cd build`
   await $`python3 ./platforms/js/build_js.py --emscripten_dir ~/tool/emsdk/upstream/emscripten build_wasm --build_wasm`;
   const s = `
-sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y
+  sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y
 
  
 sudo apt install build-essential -y

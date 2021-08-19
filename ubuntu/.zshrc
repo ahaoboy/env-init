@@ -5,7 +5,8 @@
 
 # 第一个默认好像会到root中有点奇怪 
 # export ZSH="~/.oh-my-zsh"
-export ZSH="/home/ace/.oh-my-zsh"
+# export ZSH="/home/root/.oh-my-zsh"
+export ZSH="~/.oh-my-zsh"
 
 # export ZSH="~/.oh-my-zsh"
 
