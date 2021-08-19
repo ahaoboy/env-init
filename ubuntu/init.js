@@ -68,6 +68,13 @@ try {
   await $`sudo apt install ./google-chrome-stable_current_amd64.deb`;
 }
 
+try{
+  await $`python --version`;
+}catch (e) {
+  await $`sudo ln -s /usr/bin/python3 /usr/bin/python`;
+}
+
+
 if (!fs.existsSync(vcpkg_dir)) {
   cd(tool_dir);
   await $`git clone https://github.com/Microsoft/vcpkg.git --depth=1`;
@@ -111,7 +118,8 @@ if (!fs.existsSync(cv_dir)) {
   await $`git clone https://github.com/opencv/opencv_contrib.git --depth=1`;
   cd(cv_dir);
   // await $`mkdir -p build && cd build`
-  await $`python3 ./platforms/js/build_js.py --emscripten_dir ~/tool/emsdk/upstream/emscripten build_wasm --build_wasm``
+  await $`python3 ./platforms/js/build_js.py --emscripten_dir ~/tool/emsdk/upstream/emscripten build_wasm --build_wasm`;
+  const s = `
 sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y
 
  
