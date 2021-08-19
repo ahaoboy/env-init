@@ -48,6 +48,7 @@ const common_str = [
   "python3-pip",
   "fonts-firacode",
   "clang-format",
+  "zsh"
 ];
 await $`sudo apt install ${common_str} -y`;
 
@@ -55,7 +56,7 @@ try {
   await $`code --version`;
 } catch (e) {
   await $`wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -`;
-  await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"`;
+  await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" -y`;
   await $`sudo apt install code`;
 }
 
@@ -87,27 +88,6 @@ if (!fs.existsSync(emsdk_dir)) {
   await $`./emsdk install latest`;
   await $`./emsdk activate latest`;
   await $`source ./emsdk_env.sh`;
-}
-try {
-  await $`zsh --version`;
-} catch (e) {
-  await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
-  await $`sudo apt install zsh -y`;
-}
-
-if (!fs.existsSync(zsh_dir)) {
-  // code ~/.oh-my-zsh/themes/avit.zsh-theme
-  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
-  const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
-  const ace_zsh_path = "~/.oh-my-zsh/themes/ace.zsh-theme";
-  await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
-  const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
-  const config_zsh__path = "~/.zshrc";
-
-  await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
-  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
-  await $`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
-  await $`chsh -s /bin/zsh`;
 }
 if (!fs.existsSync(cv_dir)) {
   // await $`sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y`;
@@ -151,4 +131,25 @@ make -j4
 sudo make install
 
 `;
+}
+
+try {
+  await $`deno --version`;
+} catch (e) {
+  await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
+}
+
+// 最后安装zsh, 因为安装后会激活shell
+if (!fs.existsSync(zsh_dir)) {
+  // code ~/.oh-my-zsh/themes/avit.zsh-theme
+  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
+  const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
+  const ace_zsh_path = "~/.oh-my-zsh/themes/ace.zsh-theme";
+  await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
+  const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
+  const config_zsh__path = "~/.zshrc";
+  await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
+  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
+  await $`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
+  await $`chsh -s /bin/zsh`;
 }
