@@ -52,19 +52,20 @@ const common_str = [
 ];
 await $`sudo apt install ${common_str} -y`;
 
+
 try {
   await $`code --version`;
 } catch (e) {
   await $`wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -`;
   await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" -y`;
-  await $`sudo apt install code`;
+  await $`sudo apt install code -y`;
 }
 
 try {
   await $`google-chrome --version`;
 } catch (e) {
   await $`wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb`;
-  await $`sudo apt install ./google-chrome-stable_current_amd64.deb`;
+  await $`sudo apt install ./google-chrome-stable_current_amd64.deb -y`;
 }
 
 try {
@@ -138,6 +139,13 @@ try {
 } catch (e) {
   await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
 }
+
+// try{
+//   // rustup 需要手动选取输入
+//   await $`rustup -V`;
+// }catch(e){
+//   await $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+// }
 
 // 最后安装zsh, 因为安装后会激活shell
 if (!fs.existsSync(zsh_dir)) {
