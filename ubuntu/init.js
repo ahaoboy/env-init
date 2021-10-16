@@ -23,6 +23,7 @@ await $`sudo apt update -y`;
 await $`sudo apt upgrade -y`;
 
 const common_str = [
+  'gdb',
   "default-jre",
   "net-tools",
   "gcc",
