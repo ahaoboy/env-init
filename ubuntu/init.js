@@ -75,6 +75,34 @@ try {
   await $`sudo ln -s /usr/bin/python3 /usr/bin/python`;
 }
 
+
+try {
+  await $`docker --version`;
+} catch (e) {
+  await $`sudo apt update`;
+  await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
+  await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
+  await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
+  await $`sudo apt update`;
+  await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
+  await $`sudo usermod -aG docker $USER`;
+  await $`sudo systemctl status docker`;
+  await $`apt list -a docker-ce`;
+  await $`docker container run hello-world`;
+}
+
+
+try {
+  await $`docker-compose --version`;
+} catch (e) {
+  await $`apt install python3-dev libffi-dev gcc libc-dev make -y`;
+  await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
+  await $`sudo chmod +x /usr/local/bin/docker-compose`;
+  await $`sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose`;
+  await $`docker-compose --version`;
+}
+
+
 if (!fs.existsSync(vcpkg_dir)) {
   cd(tool_dir);
   await $`git clone https://github.com/Microsoft/vcpkg.git --depth=1`;
