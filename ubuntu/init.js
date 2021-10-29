@@ -99,7 +99,7 @@ if (!fs.existsSync(cv_dir)) {
   await $`git clone https://github.com/opencv/opencv_contrib.git --depth=1`;
   cd(cv_dir);
   // await $`mkdir -p build && cd build`
-  await $`python3 ./platforms/js/build_js.py --emscripten_dir ~/tool/emsdk/upstream/emscripten build_wasm --build_wasm`;
+  await $`python3 ./platforms/js/build_js.py --emscripten_dir /root/tool/emsdk/upstream/emscripten build_wasm --build_wasm`;
   const s = `
   sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y
 
@@ -125,7 +125,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D INSTALL_C_EXAMPLES=ON \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D OPENCV_GENERATE_PKGCONFIG=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=~/tool/opencv_contrib/modules \
+    -D OPENCV_EXTRA_MODULES_PATH=/root/tool/opencv_contrib/modules \
     -D BUILD_EXAMPLES=ON ..
    
     
@@ -153,12 +153,12 @@ if (!fs.existsSync(zsh_dir)) {
   // code ~/.oh-my-zsh/themes/avit.zsh-theme
   await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
   const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
-  const ace_zsh_path = "~/.oh-my-zsh/themes/ace.zsh-theme";
+  const ace_zsh_path = "/root/.oh-my-zsh/themes/ace.zsh-theme";
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
   const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
-  const config_zsh__path = "~/.zshrc";
+  const config_zsh__path = "/root/.zshrc";
   await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
-  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
-  await $`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
+  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
+  await $`git clone https://github.com/zsh-users/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
   await $`chsh -s /bin/zsh`;
 }
