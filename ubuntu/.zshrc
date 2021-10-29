@@ -6,7 +6,7 @@
 # 第一个默认好像会到root中有点奇怪 
 # export ZSH="~/.oh-my-zsh"
 # export ZSH="/home/root/.oh-my-zsh"
-export ZSH="~/.oh-my-zsh"
+export ZSH="${HOME}/.oh-my-zsh"
 
 # export ZSH="~/.oh-my-zsh"
 
@@ -120,7 +120,7 @@ function emcc_setup(){
     cd $nowPwd
 }
 
-alias vcpkg="~/tool/vcpkg/vcpkg"
+alias vcpkg="${HOME}/tool/vcpkg/vcpkg"
 
 # # Wasmer
 # export WASMER_DIR="~/.wasmer"
@@ -131,13 +131,13 @@ alias vcpkg="~/tool/vcpkg/vcpkg"
 # [ -s "$WASIENV_DIR/wasienv.sh" ] && source "$WASIENV_DIR/wasienv.sh"
 
 
-alias vcpkg_cmake="~/tool/vcpkg/scripts/buildsystems/vcpkg.cmake"
-alias emcc_cmake="~/tool/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+alias vcpkg_cmake="${HOME}/tool/vcpkg/scripts/buildsystems/vcpkg.cmake"
+alias emcc_cmake="${HOME}/tool/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
 alias p="pnpm"
 alias px="pnpx"
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-export DENO_INSTALL="~/.deno"
+export DENO_INSTALL="${HOME}/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
