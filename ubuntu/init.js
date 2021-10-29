@@ -3,6 +3,7 @@ import { $, cd } from "zx";
 import os from "os";
 import fs from "fs";
 import path from "path";
+import { chunk } from "lodash-es";
 
 const init_dir = path.resolve("./");
 const home = os.homedir();
@@ -145,8 +146,13 @@ try {
   ziyasal.vscode-open-in-github`
     .split("\n")
     .map((i) => i.trim());
-  for (const name of plugins) {
-    await $`code --install-extension ${name} --force`;
+  const limit = 8;
+  for (const list of chunk(plugins, limit)) {
+    await Promise.all(
+      list.map(
+        (name) => name.length && $`code --install-extension ${name} --force`
+      )
+    );
   }
 }
 
