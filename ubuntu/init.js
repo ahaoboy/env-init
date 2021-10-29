@@ -60,6 +60,72 @@ try {
   await $`wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -`;
   await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" -y`;
   await $`sudo apt install code -y`;
+
+  // plugins
+  const plugins = `adpyke.codesnap
+    alefragnani.project-manager
+    amatiasq.sort-imports
+    be5invis.toml
+    christian-kohler.npm-intellisense
+    christian-kohler.path-intellisense
+    CodeInChinese.EnglishChineseDictionary
+    cschlosser.doxdocgen
+    cssho.vscode-svgviewer
+    dbaeumer.vscode-eslint
+    donjayamanne.githistory
+    eamodio.gitlens
+    eg2.vscode-npm-script
+    esbenp.prettier-vscode
+    felixfbecker.php-debug
+    firsttris.vscode-jest-runner
+    formulahendry.code-runner
+    gamedilong.anes
+    GitHub.vscode-pull-request-github
+    jasonnutter.search-node-modules
+    jawandarajbir.react-vscode-extension-pack
+    jeff-hykin.better-cpp-syntax
+    jock.svg
+    johnsoncodehk.volar
+    MaxvanderSchee.web-accessibility
+    mhutchie.git-graph
+    ms-azuretools.vscode-azureappservice
+    ms-azuretools.vscode-azurefunctions
+    ms-azuretools.vscode-azureresourcegroups
+    ms-dotnettools.csharp
+    ms-python.python
+    ms-python.vscode-pylance
+    ms-toolsai.jupyter
+    ms-toolsai.jupyter-keymap
+    ms-toolsai.jupyter-renderers
+    ms-vscode-remote.remote-containers
+    ms-vscode-remote.remote-ssh
+    ms-vscode-remote.remote-ssh-edit
+    ms-vscode-remote.remote-wsl
+    ms-vscode.azure-account
+    ms-vscode.cmake-tools
+    ms-vscode.cpptools
+    ms-vscode.cpptools-extension-pack
+    ms-vscode.cpptools-themes
+    ms-vscode.powershell
+    ms-vsliveshare.vsliveshare
+    ms-vsliveshare.vsliveshare-audio
+    msjsdiag.debugger-for-chrome
+    msjsdiag.debugger-for-edge
+    peregrineplatform.peregrine-webexperience-setup
+    peregrineplatform.peregrineconfig
+    rust-lang.rust
+    rvest.vs-code-prettier-eslint
+    streetsidesoftware.code-spell-checker
+    svipas.prettier-plus
+    TeamsDevApp.ms-teams-vscode-extension
+    twxs.cmake
+    wix.vscode-import-cost
+    xabikos.JavaScriptSnippets
+    xabikos.ReactSnippets
+    yzhang.markdown-all-in-one`.split('\n')
+
+  const list = plugins.map(name => $`code --install-extension ${name} --force`);
+  await Promise.all(list);
 }
 
 try {
