@@ -264,9 +264,14 @@ try {
   // rustup 需要手动选取输入
   await $`rustup -V`;
 } catch (e) {
-  const p = $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-  p.stdin.write("1\n");
-  await p;
+  // const p = $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+  // p.stdin.write("1\n");
+  // await p;
+
+  cd(init_dir)
+  await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`
+  await $`chmod +x ${init_dir}/rustup.sh`;
+  await $`/bin/sh ${init_dir}/rustup.sh -y`
 }
 
 // 最后安装zsh, 因为安装后会激活shell
