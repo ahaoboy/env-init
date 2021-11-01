@@ -260,16 +260,22 @@ try {
   await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
 }
 
-// try{
-//   // rustup 需要手动选取输入
-//   await $`rustup -V`;
-// }catch(e){
-//   await $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-// }
+try {
+  // rustup 需要手动选取输入
+  await $`rustup -V`;
+} catch (e) {
+  const p = $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+  p.stdin.write("1\n");
+  await p;
+}
 
 // 最后安装zsh, 因为安装后会激活shell
 if (!fs.existsSync(zsh_dir)) {
-  // code ~/.oh-my-zsh/themes/avit.zsh-theme
+  process.env.RUNZSH = 'no'
+  const p = $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
+  p.stdin.write("Y\n");
+  await p;
+
   const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
   const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
@@ -278,6 +284,5 @@ if (!fs.existsSync(zsh_dir)) {
   await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
   await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${home}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
   await $`git clone https://github.com/zsh-users/zsh-autosuggestions  ${home}/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
-  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
   await $`chsh -s /bin/zsh`;
 }
