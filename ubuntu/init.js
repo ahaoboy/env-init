@@ -272,6 +272,15 @@ try {
   await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`
   await $`chmod +x ${init_dir}/rustup.sh`;
   await $`/bin/sh ${init_dir}/rustup.sh -y`
+  await $`source ${home}/.cargo/env`;
+
+  await $`rustup self update`
+  await $`rustup install stable`
+  await $`rustup default stable`
+  await $`rustup toolchain install stable`
+  await $`rustup component add rls --toolchain stable`
+  await $`rustup component add rust-analysis --toolchain stable`
+  await $`rustup component add rust-src --toolchain stable`
 }
 
 // 最后安装zsh, 因为安装后会激活shell
