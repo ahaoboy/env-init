@@ -271,17 +271,18 @@ try {
   cd(init_dir)
   await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`
   await $`chmod +x ${init_dir}/rustup.sh`;
-  await $`/bin/sh ${init_dir}/rustup.sh -y`
+  await $`sh ${init_dir}/rustup.sh -y`
   await $`source ${home}/.cargo/env`;
 
+  const rustup = `${home}/.cargo/bin/rustup`
   try {
-    await $`rustup self update`
-    await $`rustup install stable`
-    await $`rustup default stable`
-    await $`rustup toolchain install stable`
-    await $`rustup component add rls --toolchain stable`
-    await $`rustup component add rust-analysis --toolchain stable`
-    await $`rustup component add rust-src --toolchain stable`
+    await $`${rustup} self update`
+    await $`${rustup} install stable`
+    await $`${rustup} default stable`
+    await $`${rustup} toolchain install stable`
+    await $`${rustup} component add rls --toolchain stable`
+    await $`${rustup} component add rust-analysis --toolchain stable`
+    await $`${rustup} component add rust-src --toolchain stable`
   } catch (e) {
     console.log(e)
   }
