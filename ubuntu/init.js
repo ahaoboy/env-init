@@ -147,12 +147,16 @@ try {
     .split("\n")
     .map((i) => i.trim());
   const limit = 8;
-  for (const list of chunk(plugins, limit)) {
-    await Promise.all(
-      list.map(
-        (name) => name.length && $`code --install-extension ${name} --force`
-      )
-    );
+  try {
+    for (const list of chunk(plugins, limit)) {
+      await Promise.all(
+        list.map(
+          (name) => name.length && $`code --install-extension ${name} --force`
+        )
+      );
+    }
+  }catch(e){
+    console.log(e);
   }
 }
 
@@ -188,7 +192,8 @@ try {
   await $`docker-compose --version`;
 } catch (e) {
   await $`apt install python3-dev libffi-dev gcc libc-dev make -y`;
-  await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
+  // await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
+  await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose`;
   await $`sudo chmod +x /usr/local/bin/docker-compose`;
   await $`sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose`;
   await $`docker-compose --version`;
