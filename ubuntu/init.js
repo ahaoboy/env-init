@@ -155,7 +155,7 @@ try {
         )
       );
     }
-  }catch(e){
+  } catch (e) {
     console.log(e);
   }
 }
@@ -176,16 +176,20 @@ try {
 try {
   await $`docker --version`;
 } catch (e) {
-  await $`sudo apt update`;
-  await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
-  await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
-  await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
-  await $`sudo apt update`;
-  await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
-  await $`sudo usermod -aG docker $USER`;
-  await $`sudo systemctl status docker`;
-  await $`apt list -a docker-ce`;
-  await $`docker container run hello-world`;
+  try {
+    await $`sudo apt update`;
+    await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
+    await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
+    await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
+    await $`sudo apt update`;
+    await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
+    await $`sudo usermod -aG docker $USER`;
+    await $`sudo systemctl status docker`;
+    await $`apt list -a docker-ce`;
+    await $`docker container run hello-world`;
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 try {
