@@ -303,9 +303,11 @@ if (!fs.existsSync(zsh_dir)) {
   const p = $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
   p.stdin.write("Y\n");
   await p;
+}
 
-  const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
-  const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
+const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
+const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
+if(!fs.existsSync(ace_zsh_path)){
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
   const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
   const config_zsh__path = `${home}/.zshrc`;
