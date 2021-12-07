@@ -24,6 +24,8 @@ await $`sudo apt update -y`;
 await $`sudo apt upgrade -y`;
 
 const common_str = [
+  "clang",
+  "lld",
   "gdb",
   "default-jre",
   "net-tools",
