@@ -24,6 +24,8 @@ await $`sudo apt update -y`;
 await $`sudo apt upgrade -y`;
 
 const common_str = [
+  "clang",
+  "lld",
   "gdb",
   "default-jre",
   "net-tools",
@@ -147,16 +149,16 @@ try {
     .split("\n")
     .map((i) => i.trim());
   const limit = 8;
-  for (const list of chunk(plugins, limit)) {
-    try {
+  try {
+    for (const list of chunk(plugins, limit)) {
       await Promise.all(
         list.map(
           (name) => name.length && $`code --install-extension ${name} --force`
         )
       );
-    } catch (e) {
-      console.log(e);
     }
+  } catch (e) {
+    console.log(e);
   }
 }
 
@@ -176,23 +178,28 @@ try {
 try {
   await $`docker --version`;
 } catch (e) {
-  await $`sudo apt update`;
-  await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
-  await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
-  await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
-  await $`sudo apt update`;
-  await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
-  await $`sudo usermod -aG docker $USER`;
-  await $`sudo systemctl status docker`;
-  await $`apt list -a docker-ce`;
-  await $`docker container run hello-world`;
+  try {
+    await $`sudo apt update`;
+    await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
+    await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
+    await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
+    await $`sudo apt update`;
+    await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
+    await $`sudo usermod -aG docker $USER`;
+    await $`sudo systemctl status docker`;
+    await $`apt list -a docker-ce`;
+    await $`docker container run hello-world`;
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 try {
   await $`docker-compose --version`;
 } catch (e) {
   await $`apt install python3-dev libffi-dev gcc libc-dev make -y`;
-  await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
+  // await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
+  await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose`;
   await $`sudo chmod +x /usr/local/bin/docker-compose`;
   await $`sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose`;
   await $`docker-compose --version`;
@@ -264,19 +271,45 @@ try {
   await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
 }
 
-// try{
-//   // rustup 需要手动选取输入
-//   await $`rustup -V`;
-// }catch(e){
-//   await $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-// }
+try {
+  // rustup 需要手动选取输入
+  await $`rustup -V`;
+} catch (e) {
+  // const p = $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+  // p.stdin.write("1\n");
+  // await p;
+
+  cd(init_dir)
+  await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`
+  await $`chmod +x ${init_dir}/rustup.sh`;
+  await $`sh ${init_dir}/rustup.sh -y`
+  await $`source ${home}/.cargo/env`;
+
+  const rustup = `${home}/.cargo/bin/rustup`
+  try {
+    await $`${rustup} self update`
+    await $`${rustup} install stable`
+    await $`${rustup} default stable`
+    await $`${rustup} toolchain install stable`
+    await $`${rustup} component add rls --toolchain stable`
+    await $`${rustup} component add rust-analysis --toolchain stable`
+    await $`${rustup} component add rust-src --toolchain stable`
+  } catch (e) {
+    console.log(e)
+  }
+}
 
 // 最后安装zsh, 因为安装后会激活shell
 if (!fs.existsSync(zsh_dir)) {
-  // code ~/.oh-my-zsh/themes/avit.zsh-theme
-  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
-  const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
-  const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
+  process.env.RUNZSH = 'no'
+  const p = $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
+  p.stdin.write("Y\n");
+  await p;
+}
+
+const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
+const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
+if(!fs.existsSync(ace_zsh_path)){
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
   const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
   const config_zsh__path = `${home}/.zshrc`;
