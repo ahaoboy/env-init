@@ -148,11 +148,15 @@ try {
     .map((i) => i.trim());
   const limit = 8;
   for (const list of chunk(plugins, limit)) {
-    await Promise.all(
-      list.map(
-        (name) => name.length && $`code --install-extension ${name} --force`
-      )
-    );
+    try {
+      await Promise.all(
+        list.map(
+          (name) => name.length && $`code --install-extension ${name} --force`
+        )
+      );
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
