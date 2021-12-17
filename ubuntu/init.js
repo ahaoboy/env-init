@@ -23,6 +23,8 @@ await $`sudo apt update -y`;
 await $`sudo apt upgrade -y`;
 
 const common_str = [
+  "net-tools",
+  "openssh-server",
   "default-jre",
   "net-tools",
   "gcc",
