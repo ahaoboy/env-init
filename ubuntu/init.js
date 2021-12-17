@@ -3,6 +3,7 @@ import { $, cd } from "zx";
 import os from "os";
 import fs from "fs";
 import path from "path";
+import { chunk } from "lodash-es";
 
 const init_dir = path.resolve("./");
 const home = os.homedir();
@@ -25,6 +26,9 @@ await $`sudo apt upgrade -y`;
 const common_str = [
   "net-tools",
   "openssh-server",
+  "clang",
+  "lld",
+  "gdb",
   "default-jre",
   "net-tools",
   "gcc",
@@ -50,6 +54,7 @@ const common_str = [
   "python3-pip",
   "fonts-firacode",
   "clang-format",
+  "zsh",
 ];
 await $`sudo apt install ${common_str} -y`;
 
@@ -57,21 +62,149 @@ try {
   await $`code --version`;
 } catch (e) {
   await $`wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -`;
-  await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"`;
-  await $`sudo apt install code`;
+  await $`add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" -y`;
+  await $`sudo apt install code -y`;
+
+  // plugins
+  const plugins = `alefragnani.project-manager
+  amatiasq.sort-imports
+  be5invis.toml
+  CodeInChinese.EnglishChineseDictionary
+  cschlosser.doxdocgen
+  cssho.vscode-svgviewer
+  dbaeumer.vscode-eslint
+  donjayamanne.githistory
+  eamodio.gitlens
+  formulahendry.code-runner
+  jawandarajbir.react-vscode-extension-pack
+  jeff-hykin.better-cpp-syntax
+  jock.svg
+  johnsoncodehk.volar
+  MaxvanderSchee.web-accessibility
+  mhutchie.git-graph
+  ms-dotnettools.csharp
+  ms-python.python
+  ms-python.vscode-pylance
+  ms-vscode-remote.remote-containers
+  ms-vscode-remote.remote-ssh
+  ms-vscode-remote.remote-ssh-edit
+  ms-vscode-remote.remote-wsl
+  ms-vscode.cmake-tools
+  ms-vscode.cpptools
+  ms-vscode.cpptools-extension-pack
+  ms-vscode.cpptools-themes
+  ms-vscode.powershell
+  msjsdiag.debugger-for-chrome
+  msjsdiag.debugger-for-edge
+  rust-lang.rust
+  rvest.vs-code-prettier-eslint
+  streetsidesoftware.code-spell-checker
+  svipas.prettier-plus
+  twxs.cmake
+  wix.vscode-import-cost
+  yzhang.markdown-all-in-one
+  bungcip.better-toml
+  cheshirekow.cmake-format
+  codezombiech.gitignore
+  donjayamanne.git-extension-pack
+  donjayamanne.python-extension-pack
+  dunstontc.vscode-rust-syntax
+  dustypomerleau.rust-syntax
+  evgeniypeshkov.syntax-highlighter
+  formulahendry.auto-close-tag
+  formulahendry.auto-rename-tag
+  foxundermoon.shell-format
+  Gruntfuggly.todo-tree
+  JScearcy.rust-doc-viewer
+  kisstkondoros.vscode-gutter-preview
+  lorenzopirro.rust-flash-snippets
+  magicstack.MagicPython
+  matklad.rust-analyzer
+  mike-co.import-sorter
+  mikestead.dotenv
+  miqh.vscode-language-rust
+  mooman219.rust-assist
+  ms-azuretools.vscode-docker
+  ms-vscode-remote.vscode-remote-extensionpack
+  nyxiative.rust-and-friends
+  Orta.vscode-jest
+  PolyMeilex.rust-targets
+  ritwickdey.LiveServer
+  serayuzgur.crates
+  Shan.code-settings-sync
+  statiolake.vscode-rustfmt
+  steoates.autoimport
+  stevencl.addDocComments
+  Swellaby.rust-pack
+  TabNine.tabnine-vscode
+  tamasfe.even-better-toml
+  techer.open-in-browser
+  tht13.python
+  usernamehw.errorlens
+  vadimcn.vscode-lldb
+  VisualStudioExptTeam.vscodeintellicode
+  vscode-icons-team.vscode-icons
+  wayou.vscode-todo-highlight
+  xaver.clang-format
+  ZhangYue.rust-mod-generator
+  ziyasal.vscode-open-in-github`
+    .split("\n")
+    .map((i) => i.trim());
+  const limit = 8;
+  try {
+    for (const list of chunk(plugins, limit)) {
+      await Promise.all(
+        list.map(
+          (name) => name.length && $`code --install-extension ${name} --force`
+        )
+      );
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 try {
   await $`google-chrome --version`;
 } catch (e) {
   await $`wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb`;
-  await $`sudo apt install ./google-chrome-stable_current_amd64.deb`;
+  await $`sudo apt install ./google-chrome-stable_current_amd64.deb -y`;
 }
 
 try {
   await $`python --version`;
 } catch (e) {
   await $`sudo ln -s /usr/bin/python3 /usr/bin/python`;
+}
+
+try {
+  await $`docker --version`;
+} catch (e) {
+  try {
+    await $`sudo apt update`;
+    await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
+    await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
+    await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
+    await $`sudo apt update`;
+    await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
+    await $`sudo usermod -aG docker $USER`;
+    await $`sudo systemctl status docker`;
+    await $`apt list -a docker-ce`;
+    await $`docker container run hello-world`;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+try {
+  await $`docker-compose --version`;
+} catch (e) {
+  await $`apt install python3-dev libffi-dev gcc libc-dev make -y`;
+  // await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
+  await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose`;
+  await $`sudo chmod +x /usr/local/bin/docker-compose`;
+  await $`sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose`;
+  await $`docker-compose --version`;
 }
 
 if (!fs.existsSync(vcpkg_dir)) {
@@ -90,27 +223,6 @@ if (!fs.existsSync(emsdk_dir)) {
   await $`./emsdk activate latest`;
   await $`source ./emsdk_env.sh`;
 }
-try {
-  await $`zsh --version`;
-} catch (e) {
-  await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
-  await $`sudo apt install zsh -y`;
-}
-
-if (!fs.existsSync(zsh_dir)) {
-  // code ~/.oh-my-zsh/themes/avit.zsh-theme
-  await $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
-  const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
-  const ace_zsh_path = "~/.oh-my-zsh/themes/ace.zsh-theme";
-  await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
-  const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
-  const config_zsh__path = "~/.zshrc";
-
-  await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
-  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
-  await $`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
-  await $`chsh -s /bin/zsh`;
-}
 if (!fs.existsSync(cv_dir)) {
   // await $`sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y`;
   // await $`apt install libavcodec-dev libavformat-dev libswscale-dev -y`;
@@ -119,7 +231,7 @@ if (!fs.existsSync(cv_dir)) {
   await $`git clone https://github.com/opencv/opencv_contrib.git --depth=1`;
   cd(cv_dir);
   // await $`mkdir -p build && cd build`
-  await $`python3 ./platforms/js/build_js.py --emscripten_dir ~/tool/emsdk/upstream/emscripten build_wasm --build_wasm`;
+  await $`python3 ./platforms/js/build_js.py --emscripten_dir ${home}/tool/emsdk/upstream/emscripten build_wasm --build_wasm`;
   const s = `
   sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y
 
@@ -145,7 +257,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D INSTALL_C_EXAMPLES=ON \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D OPENCV_GENERATE_PKGCONFIG=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=~/tool/opencv_contrib/modules \
+    -D OPENCV_EXTRA_MODULES_PATH=/root/tool/opencv_contrib/modules \
     -D BUILD_EXAMPLES=ON ..
    
     
@@ -153,4 +265,58 @@ make -j4
 sudo make install
 
 `;
+}
+
+try {
+  await $`deno --version`;
+} catch (e) {
+  await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
+}
+
+try {
+  // rustup 需要手动选取输入
+  await $`rustup -V`;
+} catch (e) {
+  // const p = $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+  // p.stdin.write("1\n");
+  // await p;
+
+  cd(init_dir)
+  await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`
+  await $`chmod +x ${init_dir}/rustup.sh`;
+  await $`sh ${init_dir}/rustup.sh -y`
+  await $`source ${home}/.cargo/env`;
+
+  const rustup = `${home}/.cargo/bin/rustup`
+  try {
+    await $`${rustup} self update`
+    await $`${rustup} install stable`
+    await $`${rustup} default stable`
+    await $`${rustup} toolchain install stable`
+    await $`${rustup} component add rls --toolchain stable`
+    await $`${rustup} component add rust-analysis --toolchain stable`
+    await $`${rustup} component add rust-src --toolchain stable`
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// 最后安装zsh, 因为安装后会激活shell
+if (!fs.existsSync(zsh_dir)) {
+  process.env.RUNZSH = 'no'
+  const p = $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
+  p.stdin.write("Y\n");
+  await p;
+}
+
+const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
+const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
+if(!fs.existsSync(ace_zsh_path)){
+  await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
+  const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
+  const config_zsh__path = `${home}/.zshrc`;
+  await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
+  await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${home}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
+  await $`git clone https://github.com/zsh-users/zsh-autosuggestions  ${home}/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
+  await $`chsh -s /bin/zsh`;
 }
