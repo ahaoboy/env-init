@@ -113,7 +113,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-function emcc_setup(){
+function emsdk_setup(){
     nowPwd=$( pwd )
     cd ~/tool/emsdk
     . ./emsdk_env.sh
