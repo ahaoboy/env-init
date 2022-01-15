@@ -36,5 +36,6 @@ const common_str = [
   "fonts-firacode",
   "clang-format",
   "zsh",
+  "ninja-build",
 ];
 await $`sudo apt install ${common_str} -y`;
