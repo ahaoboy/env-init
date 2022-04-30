@@ -169,6 +169,7 @@ if (!fs.existsSync(zsh_dir)) {
 const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
 const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
 if(!fs.existsSync(ace_zsh_path)){
+  await $`mkdir -p ${ace_zsh_path}`
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
   const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
   const config_zsh__path = `${home}/.zshrc`;
