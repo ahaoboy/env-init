@@ -115,26 +115,29 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 function emsdk_setup(){
     nowPwd=$( pwd )
-    cd ~/tool/emsdk
+    cd ${HOME}/tool/emsdk
     . ./emsdk_env.sh
     cd $nowPwd
 }
 
 alias vcpkg="${HOME}/tool/vcpkg/vcpkg"
 
-# # Wasmer
-# export WASMER_DIR="~/.wasmer"
-# [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# # Wasienv
-# export WASIENV_DIR="~/.wasienv"
-# [ -s "$WASIENV_DIR/wasienv.sh" ] && source "$WASIENV_DIR/wasienv.sh"
-
-
-alias vcpkg_cmake="${HOME}/tool/vcpkg/scripts/buildsystems/vcpkg.cmake"
-alias emcc_cmake="${HOME}/tool/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
 alias p="pnpm"
 alias px="pnpx"
+alias c="clear"
+alias pi="pnpm install"
+alias pb="pnpm build"
+alias pd="pnpm dev"
+alias pst="pnpm start"
+alias pt="pnpm test"
+alias psp="pnpm snapshot"
+alias rm="trash"
+alias pc="pnpm commit"
+alias rnm="find . -name \"node_modules\" -type d -exec rm -rf '{}' +"
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
