@@ -36,11 +36,6 @@ const backup = (p) => {
   fs.writeFileSync(p, s);
 }
 
-{
-  const p = "/root/.profile";
-  backup(p);
-  fs.writeFileSync(p, fs.readFileSync("./.profile", "utf-8"));
-}
 
 {
   const p = "/etc/gdm3/custom.conf";
