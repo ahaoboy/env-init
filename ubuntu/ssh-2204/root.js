@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import fs from "fs";
-
+import path from "path";
 const backup = (p) => {
   const s = fs.readFileSync(p, "utf-8");
   fs.writeFileSync(p + ".bk", s);
+  const name = path.basename(p);
+  fs.writeFileSync(`./${name}.bk`, s);
 };
 
 {
@@ -36,7 +38,6 @@ const backup = (p) => {
   fs.writeFileSync(p, s);
 }
 
-
 {
   const p = "/etc/gdm3/custom.conf";
   backup(p);
@@ -50,8 +51,7 @@ const backup = (p) => {
 }
 
 {
-// sudo apt install openssh-server net-tools -y
-// sudo /etc/init.d/ssh start 
-
-// ps -e | grep ssh
+  // sudo apt install openssh-server net-tools -y
+  // sudo /etc/init.d/ssh start
+  // ps -e | grep ssh
 }
