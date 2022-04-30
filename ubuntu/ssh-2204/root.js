@@ -53,3 +53,10 @@ const backup = (p) => {
   backup(p);
   fs.writeFileSync(p, fs.readFileSync("./sshd_config", "utf-8"));
 }
+
+{
+// sudo apt install openssh-server net-tools -y
+// sudo /etc/init.d/ssh start 
+
+// ps -e | grep ssh
+}
