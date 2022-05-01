@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/ahaoboy/env-init#readme",
   "dependencies": {
-    "lodash-es": "^4.17.21",
-    "zx": "^3.0.0"
+    "lodash-es": "latest",
+    "zx": "latest"
   }
 }
