@@ -3,7 +3,6 @@ import { $, cd } from "zx";
 import os from "os";
 import fs from "fs";
 import path from "path";
-import { chunk } from "lodash-es";
 
 const init_dir = path.resolve("./");
 const home = os.homedir();
@@ -16,62 +15,70 @@ const emsdk_dir = `${home}/tool/emsdk`;
 const cv_dir = `${home}/tool/opencv`;
 const zsh_dir = `${home}/.oh-my-zsh`;
 
+const exec = async (name, condition, run) => {
+  console.log(name, "start");
+  try {
+    if (condition instanceof Promise) {
+      try {
+        await condition;
+      } catch (err) {
+        await run();
+      }
+    } else if (condition) {
+      await run();
+    }
+    console.log(name, "end");
+  } catch (err) {
+    console.log(name, "failed", err);
+  }
+};
+
 if (!fs.existsSync(tool_dir)) {
   await $`mkdir tool`;
 }
 cd(tool_dir);
 
-try {
-  await $`google-chrome --version`;
-} catch (e) {
+await exec("google-chrome", false && $`google-chrome --version`, async () => {
   await $`wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb`;
   await $`sudo apt install ./google-chrome-stable_current_amd64.deb -y`;
-}
+});
 
-try {
-  await $`python --version`;
-} catch (e) {
-  await $`sudo ln -s /usr/bin/python3 /usr/bin/python`;
-}
+await exec(
+  "python",
+  $`python --version`,
+  () => $`sudo ln -s /usr/bin/python3 /usr/bin/python`
+);
 
-try {
-  await $`docker --version`;
-} catch (e) {
-  try {
-    await $`sudo apt update`;
-    await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
-    await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
-    await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
-    await $`sudo apt update`;
-    await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
-    await $`sudo usermod -aG docker $USER`;
-    await $`sudo systemctl status docker`;
-    await $`apt list -a docker-ce`;
-    await $`docker container run hello-world`;
-  } catch (e) {
-    console.log(e)
-  }
-}
+await exec("docker", false && $`docker --version`, async () => {
+  await $`sudo apt update`;
+  await $`sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`;
+  await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`;
+  await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y`;
+  await $`sudo apt update`;
+  await $`sudo apt install docker-ce docker-ce-cli containerd.io -y`;
+  await $`sudo usermod -aG docker $USER`;
+  await $`sudo systemctl status docker`;
+  await $`apt list -a docker-ce`;
+  await $`docker container run hello-world`;
+});
 
-try {
-  await $`docker-compose --version`;
-} catch (e) {
+await exec("docker-compose", false && $`docker-compose --version`, async () => {
   await $`apt install python3-dev libffi-dev gcc libc-dev make -y`;
   // await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`;
   await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose`;
   await $`sudo chmod +x /usr/local/bin/docker-compose`;
   await $`sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose`;
   await $`docker-compose --version`;
-}
+});
 
-if (!fs.existsSync(vcpkg_dir)) {
+await exec("vcpkg", !fs.existsSync(vcpkg_dir), async () => {
   cd(tool_dir);
   await $`git clone https://github.com/Microsoft/vcpkg.git --depth=1`;
   cd(`${tool_dir}/vcpkg`);
   await $`./bootstrap-vcpkg.sh`;
-}
+});
 
-if (!fs.existsSync(emsdk_dir)) {
+await exec("emsdk", !fs.existsSync(emsdk_dir), async () => {
   cd(tool_dir);
   await $`git clone https://github.com/juj/emsdk.git --depth=1`;
   cd(emsdk_dir);
@@ -79,8 +86,9 @@ if (!fs.existsSync(emsdk_dir)) {
   await $`./emsdk install latest`;
   await $`./emsdk activate latest`;
   await $`source ./emsdk_env.sh`;
-}
-if (!fs.existsSync(cv_dir)) {
+});
+
+await exec("opencv", false && !fs.existsSync(cv_dir), async () => {
   // await $`sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" -y`;
   // await $`apt install libavcodec-dev libavformat-dev libswscale-dev -y`;
   cd(tool_dir);
@@ -122,54 +130,51 @@ make -j4
 sudo make install
 
 `;
-}
+});
 
-try {
-  await $`deno --version`;
-} catch (e) {
-  await $`curl -fsSL https://deno.land/x/install/install.sh | sh`;
-}
+await exec(
+  "deno",
+  $`deno --version`,
+  () => $`curl -fsSL https://deno.land/x/install/install.sh | sh`
+);
 
-try {
+await exec("rust", $`rustup -V`, async () => {
   // rustup 需要手动选取输入
-  await $`rustup -V`;
-} catch (e) {
   // const p = $`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
   // p.stdin.write("1\n");
   // await p;
 
-  cd(init_dir)
-  await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`
+  cd(init_dir);
+  await $`curl https://sh.rustup.rs -sSf > ${init_dir}/rustup.sh`;
   await $`chmod +x ${init_dir}/rustup.sh`;
-  await $`sh ${init_dir}/rustup.sh -y`
+  await $`sh ${init_dir}/rustup.sh -y`;
   await $`source ${home}/.cargo/env`;
 
-  const rustup = `${home}/.cargo/bin/rustup`
+  const rustup = `${home}/.cargo/bin/rustup`;
   try {
-    await $`${rustup} self update`
-    await $`${rustup} install stable`
-    await $`${rustup} default stable`
-    await $`${rustup} toolchain install stable`
-    await $`${rustup} component add rls --toolchain stable`
-    await $`${rustup} component add rust-analysis --toolchain stable`
-    await $`${rustup} component add rust-src --toolchain stable`
+    await $`${rustup} self update`;
+    await $`${rustup} install stable`;
+    await $`${rustup} default stable`;
+    await $`${rustup} toolchain install stable`;
+    await $`${rustup} component add rls --toolchain stable`;
+    await $`${rustup} component add rust-analysis --toolchain stable`;
+    await $`${rustup} component add rust-src --toolchain stable`;
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+});
 
-// 最后安装zsh, 因为安装后会激活shell
-if (!fs.existsSync(zsh_dir)) {
-  process.env.RUNZSH = 'no'
+await exec("zsh", !fs.existsSync(zsh_dir), async () => {
+  // 最后安装zsh, 因为安装后会激活shell
+  process.env.RUNZSH = "no";
   const p = $`sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`;
   p.stdin.write("Y\n");
   await p;
-}
+});
 
 const ace_init_path = path.join(init_dir, "ubuntu", "ace.zsh-theme");
 const ace_zsh_path = `${home}/.oh-my-zsh/themes/ace.zsh-theme`;
-if(!fs.existsSync(ace_zsh_path)){
-  await $`mkdir -p ${ace_zsh_path}`
+await exec("oh-my-zsh", !fs.existsSync(ace_zsh_path), async () => {
   await $`cp -avxf ${ace_init_path} ${ace_zsh_path}`;
   const config_init_path = path.join(init_dir, "ubuntu", ".zshrc");
   const config_zsh__path = `${home}/.zshrc`;
@@ -177,4 +182,4 @@ if(!fs.existsSync(ace_zsh_path)){
   await $`git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${home}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting --depth=1`;
   await $`git clone https://github.com/zsh-users/zsh-autosuggestions  ${home}/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
   await $`chsh -s /bin/zsh`;
-}
+});
