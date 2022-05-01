@@ -4,8 +4,7 @@ import path from "path";
 const backup = (p) => {
   const s = fs.readFileSync(p, "utf-8");
   fs.writeFileSync(p + ".bk", s);
-  const name = path.basename(p);
-  fs.writeFileSync(`./${name}.bk`, s);
+  fs.writeFileSync("./" + path.basename(p) + ".bk", s);
 };
 
 {

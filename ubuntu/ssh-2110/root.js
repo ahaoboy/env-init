@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import fs from "fs";
 
+import path from "path";
 const backup = (p) => {
   const s = fs.readFileSync(p, "utf-8");
   fs.writeFileSync(p + ".bk", s);
+  fs.writeFileSync("./" + path.basename(p) + ".bk", s);
 };
 
 {
