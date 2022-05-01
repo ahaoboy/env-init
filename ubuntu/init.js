@@ -183,3 +183,15 @@ await exec("oh-my-zsh", !fs.existsSync(ace_zsh_path), async () => {
   await $`git clone https://github.com/zsh-users/zsh-autosuggestions  ${home}/.oh-my-zsh/custom/plugins/zsh-autosuggestions --depth=1`;
   await $`chsh -s /bin/zsh`;
 });
+
+await exec("git", true, async () => {
+  await $`sudo add-apt-repository ppa:git-core/ppa -y`;
+  await $`sudo apt update`;
+  await $`sudo apt install -f `;
+  await $`sudo apt upgrade -y`;
+  await $`sudo apt install git -y`;
+  await $`git config --global init.defaultBranch main`;
+  await $`git config --global user.email "504595380@qq.com"`;
+  await $`git config --global user.name "ace"`;
+  await $`git config --global core.editor "code --wait"`;
+});
