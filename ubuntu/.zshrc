@@ -146,3 +146,5 @@ export DENO_INSTALL="${HOME}/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 export DENO_INSTALL="${HOME}/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
+export PATH=/root/.fnm:$PATH
+eval "`fnm env`"
