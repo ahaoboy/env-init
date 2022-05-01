@@ -53,4 +53,8 @@ const backup = (p) => {
   // sudo apt install openssh-server net-tools -y
   // sudo /etc/init.d/ssh start
   // ps -e | grep ssh
+  // sudo apt install -y build-essential linux-headers-$(uname -r)
+  // sudo add-apt-repository multiverse
+  // sudo apt update
+  // sudo apt install virtualbox-guest-utils virtualbox-guest-x11
 }
