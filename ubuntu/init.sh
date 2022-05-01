@@ -21,4 +21,6 @@ pnpm i serve -g
 pnpm i zx -g
 echo "=========finish nodejs========="
 pnpm i
+node ubuntu/install.js
 node ubuntu/init.js
+node ubuntu/vscode.js
