@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 import { $ } from "zx";
 
-await $`sudo apt update -y`;
-await $`sudo apt upgrade -y`;
-
 const common_str = [
   "net-tools",
   "openssh-server",
@@ -38,4 +35,11 @@ const common_str = [
   "zsh",
   "ninja-build",
 ];
-await $`sudo apt install ${common_str} -y`;
+async function main() {
+  await $`sudo apt update -y`;
+  await $`sudo apt upgrade -y`;
+
+  await $`sudo apt install ${common_str} -y`;
+}
+
+main();
