@@ -1,3 +1,5 @@
 node_modules
 *.bk
 pnpm.lock.yaml
+pnpm-lock.yaml
+rustup.sh

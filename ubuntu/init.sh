@@ -17,10 +17,10 @@ fnm default 16
 
 
 npm i pnpm yarn trash-cli -g
-pnpm i serve -g
-pnpm i zx -g
+npm i serve -g
+npm i zx -g
 echo "=========finish nodejs========="
 pnpm i
 node ubuntu/install.js
 node ubuntu/init.js
-node ubuntu/vscode.js
+# node ubuntu/vscode.js

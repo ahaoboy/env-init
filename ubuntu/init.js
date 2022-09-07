@@ -199,7 +199,20 @@ sudo make install
     await $`git config --global user.email "504595380@qq.com"`;
     await $`git config --global user.name "ace"`;
     await $`git config --global core.editor "code --wait"`;
+
+    await $`sudo chsh -s /bin/zsh root`
   });
+
+
+  await exec("starship", true, async () => {
+    const p = $`curl -sS https://starship.rs/install.sh | sh`;
+    p.stdin.write("y\n");
+    await p;
+    const config_init_path = path.join(init_dir, "ubuntu", "starship.toml");
+    const config_zsh__path = `${home}/.config/starship.toml`;
+    await $`cp -avxf ${config_init_path} ${config_zsh__path}`;
+  });
+
 }
 
 main();
