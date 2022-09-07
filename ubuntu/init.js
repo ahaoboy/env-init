@@ -203,9 +203,9 @@ sudo make install
     await $`sudo chsh -s /bin/zsh root`
   });
 
-
   await exec("starship", true, async () => {
-    const p = $`curl -sS https://starship.rs/install.sh | sh`;
+    await $`curl -sS https://starship.rs/install.sh > install.sh`;
+    const p = $`sh install.sh -y`;
     p.stdin.write("y\n");
     await p;
     const config_init_path = path.join(init_dir, "ubuntu", "starship.toml");
