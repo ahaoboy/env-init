@@ -8,6 +8,8 @@ Supports **Linux** (apt), **Windows** (MSYS2/pacman), **macOS** (Homebrew) and *
 
 ```bash
 cargo install --git https://github.com/ahaoboy/env-init
+
+curl -fsSL https://raw.githubusercontent.com/ahaoboy/env-init/main/install.sh | sh
 ```
 
 Or download a prebuilt binary from [Releases](https://github.com/ahaoboy/env-init/releases).
