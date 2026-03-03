@@ -1,0 +1,30 @@
+[package]
+name = "env-init"
+version = "0.2.27"
+edition = "2024"
+authors = ["ahaoboy"]
+repository = "https://github.com/ahaoboy/env-init-rs"
+description = "env-init"
+license = "MIT"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+terminal-profiles = { version = "0.1", git = "https://github.com/ahaoboy/terminal-profiles" }
+serde_json = "1"
+dirs = "6"
+path-clean = "1"
+easy-install = { version = "1", git = "https://github.com/easy-install/easy-install" }
+tokio = { version = "1", features = [
+  "macros",
+  "rt-multi-thread",
+], default-features = false }
+anyhow = "1"
+log = "0.4"
+env_logger = "0.11"
+
+[profile.release]
+debug = false
+lto = true
+strip = true
+opt-level = 3
+codegen-units = 1

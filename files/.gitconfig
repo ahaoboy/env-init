@@ -1,0 +1,30 @@
+[include]
+path = ~/gitalias.txt
+
+[pull]
+rebase = true
+
+[alias]
+s = status -sb
+
+[core]
+editor = code --wait
+autocrlf = false
+eol = lf
+safecrlf = true
+
+[format]
+pretty = "%H %ci %ce %ae %d %s"
+
+[push]
+autoSetupRemote = true
+
+[user]
+email = 504595380@qq.com
+name = ahaoboy
+
+[credential]
+helper = store
+
+[init]
+defaultBranch = main

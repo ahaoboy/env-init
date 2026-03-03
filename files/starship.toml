@@ -1,0 +1,45 @@
+format = """[ ](#DA627D bg:#DA627D)\
+$hostname\
+[](bg:#DA627D fg:#DA627D)\
+$directory\
+[](fg:#DA627D bg:#FCA17D)\
+$git_branch\
+$git_status\
+[](fg:#FCA17D bg:#86BBD8)\
+[](fg:#86BBD8 bg:#06969A)\
+[](fg:#06969A bg:#33658A)
+$character"""
+command_timeout= 20000
+
+[hostname]
+ssh_only = false
+format = '[$hostname](bg:#DA627D fg:black)'
+disabled = false
+ssh_symbol = ""
+
+[character]
+success_symbol = ""
+error_symbol = ""
+vimcmd_symbol = ""
+
+[directory]
+style = "bg:#DA627D  fg:black"
+format = "[$path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+use_os_path_sep=false
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:#FCA17D fg:black"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#FCA17D fg:black"
+format = '[$all_status$ahead_behind ]($style)'
