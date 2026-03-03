@@ -7,10 +7,10 @@ Supports **Linux** (apt), **Windows** (MSYS2/pacman), **macOS** (Homebrew) and *
 ## Installation
 
 ```bash
-cargo install --git https://github.com/ahaoboy/env-init-rs
+cargo install --git https://github.com/ahaoboy/env-init
 ```
 
-Or download a prebuilt binary from [Releases](https://github.com/ahaoboy/env-init-rs/releases).
+Or download a prebuilt binary from [Releases](https://github.com/ahaoboy/env-init/releases).
 
 ## Usage
 

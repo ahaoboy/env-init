@@ -3,7 +3,7 @@ name = "env-init"
 version = "0.2.27"
 edition = "2024"
 authors = ["ahaoboy"]
-repository = "https://github.com/ahaoboy/env-init-rs"
+repository = "https://github.com/ahaoboy/env-init"
 description = "env-init"
 license = "MIT"
 
