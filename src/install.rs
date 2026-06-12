@@ -131,11 +131,10 @@ pub async fn install_ei() -> Result<()> {
         "sigoden/dufs",
         "XAMPPRocky/tokei",
         "sharkdp/hyperfine",
-        "ahaoboy/rserve",
+        "ahaoboy/fsv",
         "ahaoboy/ansi2",
         "ahaoboy/neofetch",
         "ahaoboy/ftp-web",
-        "ahaoboy/chokidar",
         "easy-install/easy-install",
         "oven-sh/bun",
         "upx/upx",
@@ -144,8 +143,6 @@ pub async fn install_ei() -> Result<()> {
         "ajeetdsouza/zoxide",
         #[cfg(windows)]
         "ahaoboy/copy-path",
-        #[cfg(windows)]
-        "ahaoboy/serve-dav",
         "ahaoboy/mujs-build",
         "quickjs-ng/quickjs",
         "casey/just",
