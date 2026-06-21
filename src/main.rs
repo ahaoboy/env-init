@@ -26,6 +26,9 @@ use rust::rust;
 mod root;
 use root::root;
 
+mod vscode;
+use vscode::vscode;
+
 use crate::install::config_git;
 
 #[cfg(windows)]
@@ -69,15 +72,15 @@ enum Cmd {
     Node,
     /// Configure git settings and aliases
     Git,
+    /// Merge VS Code settings from embedded files
+    Vscode,
     /// Configure Windows/MSYS2 settings
     #[cfg(windows)]
     Windows,
 
     /// Run easy-install with the given arguments
     #[command(trailing_var_arg = true, allow_hyphen_values = true)]
-    Ei {
-        args: Vec<String>,
-    },
+    Ei { args: Vec<String> },
 }
 
 async fn handle_ei(args: Vec<String>) -> Result<()> {
@@ -114,6 +117,7 @@ async fn main() -> Result<()> {
         Cmd::Root => root()?,
         Cmd::Shell => shell()?,
         Cmd::Git => config_git()?,
+        Cmd::Vscode => vscode()?,
         Cmd::Node => node().await?,
         Cmd::Ei { args } => handle_ei(args).await?,
     }

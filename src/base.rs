@@ -16,8 +16,7 @@ pub fn get_file_dir() -> Result<PathBuf> {
         .context("Failed to get parent directory of executable")?;
     let d = parent.join("files");
     if !d.exists() {
-        std::fs::create_dir(&d)
-            .with_context(|| format!("Failed to create directory {:?}", d))?;
+        std::fs::create_dir(&d).with_context(|| format!("Failed to create directory {:?}", d))?;
     }
     Ok(d)
 }
@@ -31,14 +30,8 @@ pub const FILES: [(&str, &str); 5] = [
         "50-ubuntu.conf",
         include_str!("../files/ssh/50-ubuntu.conf"),
     ),
-    (
-        "gdm-autologin",
-        include_str!("../files/ssh/gdm-autologin"),
-    ),
-    (
-        "gdm-password",
-        include_str!("../files/ssh/gdm-password"),
-    ),
+    ("gdm-autologin", include_str!("../files/ssh/gdm-autologin")),
+    ("gdm-password", include_str!("../files/ssh/gdm-password")),
     ("custom.conf", include_str!("../files/ssh/custom.conf")),
     ("sshd_config", include_str!("../files/ssh/sshd_config")),
 ];
@@ -72,10 +65,11 @@ pub fn write_file<P: AsRef<Path>>(p: P, txt: &str) -> Result<()> {
     }
     backup(path);
     if let Some(dir) = path.parent()
-        && !dir.exists() {
-            std::fs::create_dir_all(dir)
-                .with_context(|| format!("Failed to create directory {:?}", dir))?;
-        }
+        && !dir.exists()
+    {
+        std::fs::create_dir_all(dir)
+            .with_context(|| format!("Failed to create directory {:?}", dir))?;
+    }
     std::fs::write(path, txt).with_context(|| format!("Failed to write file {:?}", path))?;
     Ok(())
 }
@@ -97,9 +91,10 @@ pub fn backup<P: AsRef<Path>>(p: P) {
     };
     let copy = parent.join(&name);
     if !copy.exists()
-        && let Err(e) = std::fs::copy(p, &copy) {
-            warn!("Failed to backup {:?} to {:?}: {}", p, copy, e);
-        }
+        && let Err(e) = std::fs::copy(p, &copy)
+    {
+        warn!("Failed to backup {:?} to {:?}: {}", p, copy, e);
+    }
 }
 
 /// Replace occurrences of a string in a file. Creates a backup first.
@@ -107,17 +102,21 @@ pub fn replace_file<P: AsRef<Path>>(p: P, from: &str, to: &str) -> Result<()> {
     let path = p.as_ref();
     log_operation(&format!("replace_file: {:?} ({} -> {})", path, from, to));
     if is_dry_run() {
-        info!("[dry-run] would replace in {:?}: '{}' -> '{}'", path, from, to);
+        info!(
+            "[dry-run] would replace in {:?}: '{}' -> '{}'",
+            path, from, to
+        );
         return Ok(());
     }
     backup(path);
     if let Some(dir) = path.parent()
-        && !dir.exists() {
-            std::fs::create_dir_all(dir)
-                .with_context(|| format!("Failed to create directory {:?}", dir))?;
-        }
-    let s = std::fs::read_to_string(path)
-        .with_context(|| format!("Failed to read file {:?}", path))?;
+        && !dir.exists()
+    {
+        std::fs::create_dir_all(dir)
+            .with_context(|| format!("Failed to create directory {:?}", dir))?;
+    }
+    let s =
+        std::fs::read_to_string(path).with_context(|| format!("Failed to read file {:?}", path))?;
     std::fs::write(path, s.replace(from, to))
         .with_context(|| format!("Failed to write file {:?}", path))?;
     Ok(())

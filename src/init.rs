@@ -1,7 +1,7 @@
 use anyhow::Result;
 use log::info;
 
-use crate::base::{get_file_dir, FILES};
+use crate::base::{FILES, get_file_dir};
 use crate::common::{is_dry_run, log_operation};
 
 /// Initialize embedded configuration files to the local files directory.

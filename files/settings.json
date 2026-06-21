@@ -1,0 +1,95 @@
+{
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.fontFamily": "'FiraCode Nerd Font Mono', 'Cascadia Mono', Consolas, 'Courier New','IBM VGA'",
+  "editor.fontLigatures": true,
+  "terminal.integrated.shellIntegration.enabled": false,
+  "terminal.integrated.fontFamily": "'FiraCode Nerd Font Mono', 'Cascadia Mono', Consolas, 'Courier New','PxPlus IBM VGA 9x16'",
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "explorer.confirmDelete": false,
+  "explorer.compactFolders": false,
+  "workbench.sideBar.location": "left",
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.restoreViewState": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.renderWhitespace": "none",
+  "editor.scrollBeyondLastLine": true,
+  "editor.minimap.enabled": true,
+  "editor.lineNumbers": "on",
+  "editor.find.seedSearchStringFromSelection": "never",
+  "editor.renderLineHighlight": "all",
+  "workbench.colorCustomizations": {
+    "editor.lineHighlightBackground": "#223851"
+  },
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "explorer.confirmDragAndDrop": false,
+  "extensions.ignoreRecommendations": true,
+  "editor.inlineSuggest.enabled": true,
+  "terminal.integrated.persistentSessionReviveProcess": "never",
+  "terminal.integrated.enablePersistentSessions": false,
+  "clang-format.executable": "C:/msys64/mingw64/bin/clang-format.exe",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "fish": {
+      "overrideName": true,
+      "path": "C:/msys64/msys2_shell.cmd",
+      "args": [
+        "-defterm",
+        "-here",
+        "-no-start",
+        "-mingw64",
+        "-use-full-path",
+        "-shell",
+        "fish"
+      ]
+    },
+    "bash (MSYS2)": {
+      "path": "C:\\msys64\\usr\\bin\\bash.exe",
+      "args": [
+        "--login",
+        "-i"
+      ],
+      "env": {
+        "CHERE_INVOKING": "1"
+      }
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "fish",
+  "terminal.integrated.defaultProfile.linux": "fish",
+  "redhat.telemetry.enabled": true,
+  "debug.openDebug": "neverOpen",
+  "debug.showInStatusBar": "never",
+  "workbench.iconTheme": "vscode-icons",
+  "window.zoomLevel": 1,
+  "debug.javascript.autoAttachFilter": "onlyWithFlag",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "editor.stickyScroll.enabled": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "vsicons.dontShowNewVersionMessage": true,
+  "workbench.commandPalette.showAskInChat": false,
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "workbench.editor.useModal": "some",
+  "chat.tips.enabled": false,
+  "workbench.browser.openLocalhostLinks": false,
+  "git.autofetch": true,
+  "chat.mcp.gallery.enabled": true,
+  "chat.viewSessions.orientation": "stacked"
+}

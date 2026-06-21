@@ -32,10 +32,7 @@ pub async fn node() -> Result<()> {
 #[cfg(target_os = "linux")]
 fn install_node_linux() -> Result<()> {
     info!("Installing Node.js via NodeSource (Linux)...");
-    if let Err(e) = exec_piped_shell(
-        &["-fsSL", "https://deb.nodesource.com/setup_lts.x"],
-        &["-"],
-    ) {
+    if let Err(e) = exec_piped_shell(&["-fsSL", "https://deb.nodesource.com/setup_lts.x"], &["-"]) {
         warn!("Failed to run NodeSource setup script: {}", e);
         return Ok(());
     }
@@ -47,7 +44,10 @@ fn install_node_linux() -> Result<()> {
 #[cfg(target_os = "windows")]
 fn install_node_windows() -> Result<()> {
     info!("Installing Node.js via pacman (MSYS2)...");
-    exec("pacman", vec!["-S", "--noconfirm", "mingw-w64-x86_64-nodejs"])?;
+    exec(
+        "pacman",
+        vec!["-S", "--noconfirm", "mingw-w64-x86_64-nodejs"],
+    )?;
     Ok(())
 }
 

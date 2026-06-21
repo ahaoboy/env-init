@@ -1,4 +1,4 @@
-use anyhow::{Context, bail, Result};
+use anyhow::{Context, Result, bail};
 use log::info;
 use std::{ffi::OsStr, process::Stdio};
 

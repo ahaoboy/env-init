@@ -1,7 +1,7 @@
 use anyhow::Result;
 use log::info;
 
-use crate::base::{write_file, STARSHIP};
+use crate::base::{STARSHIP, write_file};
 use crate::common::{get_home, log_operation};
 
 /// Configure fish shell and starship prompt with predefined settings.
