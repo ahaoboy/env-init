@@ -181,7 +181,7 @@ pub fn wt() -> Result<()> {
     if !ssh_added {
         profiles.push(make_profile(
             "ssh-localhost",
-            "C:/msys64/msys2_shell.cmd -defterm -here -no-start -mingw64 -use-full-path -shell fish -c \"ssh root@localhost\"",
+            "C:/msys64/msys2_shell.cmd -defterm -here -no-start -mingw64 -use-full-path -shell fish -c \"ssh root@192.168.0.1 -p 8888 -i 'C:/Users/Admin/.ssh/root' -t '/usr/bin/fish' \"",
             None,
             Some(true),
         ));
