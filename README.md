@@ -61,6 +61,7 @@ env-init git
 
 # Windows-specific setup (run in MSYS2 terminal)
 env-init windows
+env-init wt
 # restart terminal after this
 
 # Install CLI tools
