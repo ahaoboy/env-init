@@ -2,6 +2,8 @@
 use anyhow::Result;
 #[cfg(windows)]
 use log::{info, warn};
+#[cfg(windows)]
+use terminal_profiles::types::{FontConfig, Profile, ProfilesObject, ProfilesValue};
 
 #[cfg(windows)]
 use crate::base::write_file;
@@ -12,9 +14,7 @@ use crate::common::{is_dry_run, log_operation};
 /// `~/.ssh/config`, and font settings. Writes directly to the WT settings file.
 #[cfg(windows)]
 pub fn wt() -> Result<()> {
-    use terminal_profiles::{
-        FontConfig, Profile, ProfilesObject, ProfilesValue, WindowsTerminalSettings,
-    };
+    use terminal_profiles::WindowsTerminalSettings;
 
     log_operation("install_wt: configuring Windows Terminal");
 
@@ -71,45 +71,7 @@ pub fn wt() -> Result<()> {
             hidden,
             commandline: Some(cmd.to_owned()),
             icon: icon.map(|s| s.to_owned()),
-            starting_directory: None,
-            source: None,
-            tab_title: None,
-            suppress_application_title: None,
-            tab_color: None,
-            close_on_exit: None,
-            background: None,
-            background_image: None,
-            background_image_alignment: None,
-            background_image_opacity: None,
-            background_image_stretch_mode: None,
-            cursor_color: None,
-            cursor_shape: None,
-            cursor_height: None,
-            foreground: None,
-            selection_background: None,
-            color_scheme: None,
-            opacity: None,
-            use_acrylic: None,
-            padding: None,
-            font: None,
-            font_face: None,
-            font_size: None,
-            font_weight: None,
-            antialiasing_mode: None,
-            history_size: None,
-            snap_on_input: None,
-            alt_gr_aliasing: None,
-            bell_style: None,
-            bell_sound: None,
-            intense_text_style: None,
-            adjust_indistinguishable_colors: None,
-            scrollbar_state: None,
-            path_translation_style: None,
-            elevate: None,
-            environment: None,
-            auto_mark_prompts: None,
-            show_marks_on_scrollbar: None,
-            unfocused_appearance: None,
+            ..Default::default()
         }
     }
 
@@ -193,58 +155,13 @@ pub fn wt() -> Result<()> {
 
     let font = FontConfig {
         face: Some("FiraCode Nerd Font Mono".to_owned()),
-        size: None,
-        weight: None,
-        features: None,
-        axes: None,
-        cell_width: None,
-        cell_height: None,
+        ..Default::default()
     };
     let dft = Profile {
         elevate: Some(true),
-        name: None,
-        hidden: None,
-        source: None,
-        commandline: None,
-        tab_title: None,
         starting_directory: dirs::desktop_dir().map(|p| p.to_string_lossy().to_string()),
-        suppress_application_title: None,
-        icon: None,
-        tab_color: None,
-        close_on_exit: None,
-        background: None,
-        background_image: None,
-        background_image_alignment: None,
-        background_image_opacity: None,
-        background_image_stretch_mode: None,
-        cursor_color: None,
-        cursor_shape: None,
-        cursor_height: None,
-        foreground: None,
-        selection_background: None,
-        color_scheme: None,
-        opacity: None,
-        use_acrylic: None,
-        padding: None,
         font: Some(font),
-        font_face: None,
-        font_size: None,
-        font_weight: None,
-        antialiasing_mode: None,
-        history_size: None,
-        snap_on_input: None,
-        alt_gr_aliasing: None,
-        bell_style: None,
-        bell_sound: None,
-        intense_text_style: None,
-        adjust_indistinguishable_colors: None,
-        scrollbar_state: None,
-        path_translation_style: None,
-        environment: None,
-        auto_mark_prompts: None,
-        show_marks_on_scrollbar: None,
-        unfocused_appearance: None,
-        guid: None,
+        ..Default::default()
     };
     let obj: ProfilesObject = ProfilesObject {
         list: profiles,
