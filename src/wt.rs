@@ -1,7 +1,11 @@
+#[cfg(windows)]
 use anyhow::Result;
+#[cfg(windows)]
 use log::{info, warn};
 
+#[cfg(windows)]
 use crate::base::write_file;
+#[cfg(windows)]
 use crate::common::{is_dry_run, log_operation};
 
 /// Configure Windows Terminal with fish shell profile, SSH hosts from

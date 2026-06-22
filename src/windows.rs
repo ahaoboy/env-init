@@ -1,6 +1,9 @@
+#[cfg(windows)]
 use anyhow::Result;
+#[cfg(windows)]
 use log::info;
 
+#[cfg(windows)]
 use crate::{
     base::{append_file, replace_file},
     common::{get_msys64_root, log_operation},
