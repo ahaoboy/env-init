@@ -29,6 +29,10 @@ use root::root;
 mod vscode;
 use vscode::vscode;
 
+mod wt;
+#[cfg(windows)]
+use wt::wt;
+
 use crate::install::config_git;
 
 #[cfg(windows)]
@@ -74,6 +78,9 @@ enum Cmd {
     Git,
     /// Merge VS Code settings from embedded files
     Vscode,
+    /// Configure Windows Terminal (profiles, SSH hosts, font)
+    #[cfg(windows)]
+    Wt,
     /// Configure Windows/MSYS2 settings
     #[cfg(windows)]
     Windows,
@@ -118,6 +125,8 @@ async fn main() -> Result<()> {
         Cmd::Shell => shell()?,
         Cmd::Git => config_git()?,
         Cmd::Vscode => vscode()?,
+        #[cfg(windows)]
+        Cmd::Wt => wt()?,
         Cmd::Node => node().await?,
         Cmd::Ei { args } => handle_ei(args).await?,
     }
