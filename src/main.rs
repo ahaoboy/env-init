@@ -33,10 +33,11 @@ mod wt;
 #[cfg(windows)]
 use wt::wt;
 
-use crate::install::config_git;
-
+mod windows;
 #[cfg(windows)]
-use crate::install::windows;
+use windows::windows;
+
+use crate::install::config_git;
 
 /// A cross-platform CLI tool to bootstrap your development environment.
 #[derive(Parser, Debug)]
