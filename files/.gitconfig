@@ -19,10 +19,6 @@ pretty = "%H %ci %ce %ae %d %s"
 [push]
 autoSetupRemote = true
 
-[user]
-email = 504595380@qq.com
-name = ahaoboy
-
 [credential]
 helper = store
 
