@@ -4,9 +4,9 @@ use log::{info, warn};
 use crate::common::{command_exists, log_operation};
 use crate::exec::{exec, exec_piped_shell};
 
-/// Install the latest LTS version of Node.js and pnpm using platform-native commands.
+/// Install the latest LTS version of Node.js, pnpm and bun using platform-native commands.
 pub async fn node() -> Result<()> {
-    log_operation("node: installing Node.js and pnpm");
+    log_operation("node: installing Node.js, pnpm and bun");
 
     if command_exists("node") {
         info!("Node.js is already installed, skipping.");
@@ -25,6 +25,7 @@ pub async fn node() -> Result<()> {
     }
 
     install_pnpm()?;
+    install_bun()?;
     Ok(())
 }
 
@@ -79,6 +80,19 @@ fn install_pnpm() -> Result<()> {
     info!("Installing pnpm...");
     if let Err(e) = exec_piped_shell(&["-fsSL", "https://get.pnpm.io/install.sh"], &["-"]) {
         warn!("Failed to install pnpm: {}", e);
+    }
+    Ok(())
+}
+
+/// Install bun via the official install script.
+fn install_bun() -> Result<()> {
+    if command_exists("bun") {
+        info!("bun is already installed, skipping.");
+        return Ok(());
+    }
+    info!("Installing bun...");
+    if let Err(e) = exec_piped_shell(&["-fsSL", "https://bun.sh/install"], &["-"]) {
+        warn!("Failed to install bun: {}", e);
     }
     Ok(())
 }
