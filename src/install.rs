@@ -24,9 +24,116 @@ pub fn config_git() -> Result<()> {
     Ok(())
 }
 
-/// Install development tools on Linux via apt.
+/// Add fish to `/etc/shells` and set it as the default shell for root.
+#[cfg(target_os = "linux")]
+fn configure_fish_shell() -> Result<()> {
+    let shell_path = "/etc/shells";
+    if !std::fs::read_to_string(shell_path)
+        .unwrap_or_default()
+        .contains("/usr/bin/fish")
+    {
+        append_file(shell_path, "/usr/bin/fish")?;
+    }
+
+    if command_exists("chsh") {
+        let _ = exec("chsh", vec!["-s", "/usr/bin/fish", "root"]);
+    } else {
+        warn!("'chsh' command not found. Cannot change default shell.");
+    }
+    Ok(())
+}
+
+/// Restart the SSH server using the available service manager.
+#[cfg(target_os = "linux")]
+fn restart_ssh() {
+    if command_exists("service") {
+        let _ = exec("service", vec!["ssh", "restart"]);
+    } else if command_exists("rc-service") {
+        // OpenRC (Alpine Linux)
+        let _ = exec("rc-service", vec!["sshd", "restart"]);
+    } else {
+        warn!("No supported service manager found. Cannot restart SSH service.");
+    }
+}
+
+/// Install development tools on Linux.
+///
+/// Detects the package manager and dispatches to the matching implementation:
+/// `apk` on Alpine Linux, `apt` on Debian/Ubuntu.
 #[cfg(target_os = "linux")]
 pub async fn install() -> Result<()> {
+    if command_exists("apk") {
+        install_apk().await
+    } else if command_exists("apt") {
+        install_apt().await
+    } else {
+        anyhow::bail!(
+            "No supported package manager found. This script requires 'apk' (Alpine) or 'apt' (Debian/Ubuntu)."
+        );
+    }
+}
+
+/// Install development tools on Alpine Linux via apk.
+#[cfg(target_os = "linux")]
+async fn install_apk() -> Result<()> {
+    log_operation("install: installing development tools (alpine)");
+    info!("Installing development tools via apk...");
+
+    let v = vec![
+        "perl",
+        "gedit",
+        "net-tools",
+        "openssh",
+        "clang",
+        "lld",
+        "gdb",
+        "openjdk17-jre",
+        "gcc",
+        "g++",
+        "cmake",
+        "openssl",
+        "openssl-dev",
+        "git",
+        "pkgconf",
+        "build-base",
+        "nasm",
+        "wget",
+        "curl",
+        "xsel",
+        "zip",
+        "unzip",
+        "tar",
+        "python3",
+        "py3-pip",
+        "font-firacode",
+        "clang-extra-tools",
+        "zsh",
+        "ninja",
+        "p7zip",
+        "autoconf",
+        "autoconf-archive",
+        "gettext",
+        "musl-dev",
+        "txt2man",
+        "jq",
+        "fish",
+    ];
+
+    let _ = exec("apk", vec!["update"]);
+    let _ = exec("apk", vec!["upgrade"]);
+
+    for p in v {
+        if let Err(e) = exec("apk", vec!["add", p]) {
+            warn!("Failed to install {}: {}", p, e);
+        }
+    }
+
+    Ok(())
+}
+
+/// Install development tools on Debian/Ubuntu via apt.
+#[cfg(target_os = "linux")]
+async fn install_apt() -> Result<()> {
     log_operation("install: installing development tools (linux)");
 
     if !command_exists("apt") {
@@ -100,25 +207,8 @@ pub async fn install() -> Result<()> {
 
     let _ = exec("apt", vec!["install", "fish", "-y"]);
 
-    let shell_path = "/etc/shells";
-    if !std::fs::read_to_string(shell_path)
-        .unwrap_or_default()
-        .contains("/usr/bin/fish")
-    {
-        append_file(shell_path, "/usr/bin/fish")?;
-    }
-
-    if command_exists("chsh") {
-        let _ = exec("chsh", vec!["-s", "/usr/bin/fish", "root"]);
-    } else {
-        warn!("'chsh' command not found. Cannot change default shell.");
-    }
-
-    if command_exists("service") {
-        let _ = exec("service", vec!["ssh", "restart"]);
-    } else {
-        warn!("'service' command not found. Cannot restart SSH service.");
-    }
+    configure_fish_shell()?;
+    restart_ssh();
 
     Ok(())
 }
