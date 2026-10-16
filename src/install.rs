@@ -252,7 +252,7 @@ pub async fn install_ei() -> Result<()> {
         }
     }
 
-    for i in ["cargo-bins/cargo-binstall", "drager/wasm-pack"] {
+    for i in ["cargo-bins/cargo-binstall", "wasm-bindgen/wasm-pack"] {
         if let Err(e) = ei_cargo(i).await {
             warn!("Failed to install {}: {}", i, e);
         }
