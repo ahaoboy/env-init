@@ -14,8 +14,8 @@ env:
 
 jobs:
   build:
-    fail-fast: false
     strategy:
+      fail-fast: false
       matrix:
         include:
           # - target: x86_64-apple-darwin
