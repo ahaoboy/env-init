@@ -37,10 +37,13 @@ alias c="cargo"
 alias cr="cargo run"
 alias cb="cargo build"
 alias cbr="cargo build --release"
-
+alias cfix="cargo clippy --fix --allow-dirty"
+alias cfmt="cargo fmt"
 alias j="just"
 
 starship init fish | source
+mise activate fish | source
+
 # set -g MSYS2_ENV_CONV_EXCL "*"
 
 function add_sub
